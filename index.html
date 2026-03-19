@@ -8,89 +8,121 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: #0b0f19;
-      color: white;
+      background: #f5f6f8;
+      color: #111;
     }
 
+    /* HEADER */
     header {
-      text-align: center;
-      padding: 30px 15px;
-      background: linear-gradient(135deg, #111827, #1f2937);
+      background: #131921;
+      color: white;
+      padding: 12px 15px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
 
-    h1 { margin: 0; }
-
-    .sub { color: #9ca3af; }
-
-    .instructions {
-      margin: 20px auto;
-      max-width: 800px;
-      padding: 20px;
-      background: #111827;
-      border-radius: 10px;
-      text-align: center;
-    }
-
-    /* GRID FIXED */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 15px;
-      padding: 15px;
-      max-width: 1100px;
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
       margin: auto;
     }
 
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .search {
+      width: 60%;
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+      font-size: 14px;
+    }
+
+    /* GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      padding: 15px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    /* CARD */
     .card {
-      background: #111827;
-      border-radius: 10px;
+      background: white;
+      border-radius: 8px;
       overflow: hidden;
-      transition: 0.3s;
+      transition: 0.2s;
+      border: 1px solid #ddd;
     }
 
     .card:hover {
-      transform: translateY(-4px);
+      transform: scale(1.03);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
-    /* MEDIUM IMAGE SIZE */
     .card img {
       width: 100%;
-      height: 150px;
+      height: 160px;
       object-fit: cover;
     }
 
     .card-body {
-      padding: 10px;
-      text-align: center;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .title {
+      font-size: 13px;
+      font-weight: 600;
+      height: 32px;
+      overflow: hidden;
     }
 
     .price {
-      color: #00ffcc;
+      color: #B12704;
       font-weight: bold;
-      margin: 5px 0;
+      margin: 4px 0;
     }
 
     .btn {
       display: block;
-      margin: 4px 0;
-      padding: 8px;
-      border-radius: 6px;
+      margin: 3px 0;
+      padding: 6px;
+      font-size: 12px;
+      text-align: center;
+      border-radius: 4px;
       text-decoration: none;
-      font-size: 13px;
       font-weight: bold;
     }
 
-    .telebirr { background: #00ffcc; color: black; }
-    .cbe { background: orange; color: black; }
-    .telegram { background: #229ED9; color: white; }
+    .telebirr { background: #ffd814; color: black; }
+    .cbe { background: #ffa41c; color: black; }
+    .telegram { background: #0088cc; color: white; }
 
     .payment-box {
       display: none;
-      background: #0b0f19;
-      padding: 8px;
-      margin-top: 6px;
-      border-radius: 6px;
-      font-size: 12px;
+      font-size: 11px;
+      margin-top: 5px;
+      background: #f0f0f0;
+      padding: 5px;
+      border-radius: 5px;
+    }
+
+    .instructions {
+      max-width: 900px;
+      margin: 15px auto;
+      padding: 10px;
+      background: white;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #ddd;
     }
   </style>
 
@@ -102,59 +134,83 @@
       }
       document.getElementById(id).style.display = "block";
     }
-  </script>
 
+    function searchBooks() {
+      let input = document.getElementById("searchInput").value.toLowerCase();
+      let books = document.getElementsByClassName("book");
+
+      for (let i = 0; i < books.length; i++) {
+        let title = books[i].innerText.toLowerCase();
+        books[i].style.display = title.includes(input) ? "" : "none";
+      }
+    }
+  </script>
 </head>
 
 <body>
 
 <header>
-  <h1>Forex Trading Library</h1>
-  <p class="sub">Premium Forex Books & Strategies</p>
+  <div class="topbar">
+    <div class="logo">Forex Library</div>
+    <input class="search" id="searchInput" onkeyup="searchBooks()" placeholder="Search books...">
+  </div>
 </header>
 
 <div class="instructions">
-  <h3>How to Buy</h3>
-  <p>Select book → Pay → Send screenshot → Get files instantly</p>
+  Select a book → Pay → Send screenshot → Get files instantly
 </div>
 
 <div class="grid">
 
-<script>
-for (let i = 1; i <= 50; i++) {
-  document.write(`
-    <div class="card">
-      <img src="https://via.placeholder.com/300x200?text=Book+${i}">
-      
-      <div class="card-body">
-        <h4>Forex Book ${i}</h4>
-        <div class="price">$10</div>
+  <!-- BOOK 1 -->
+  <div class="card book">
+    <img src="book1.jpg">
+    <div class="card-body">
+      <div class="title">Forex Basics Guide</div>
+      <div class="price">$10</div>
 
-        <a class="btn telebirr" onclick="showPayment('tb${i}')">Telebirr</a>
-        <a class="btn cbe" onclick="showPayment('cbe${i}')">CBE</a>
+      <a class="btn telebirr" onclick="showPayment('tb1')">Telebirr</a>
+      <a class="btn cbe" onclick="showPayment('cbe1')">CBE</a>
 
-        <div id="tb${i}" class="payment-box">
-          <p>Telebirr: 0951729849</p>
-          <p>Misgana Birhanu Mosisa</p>
-          <a class="btn telegram" href="https://t.me/misganafx?text=I%20have%20paid%20for%20Book%20${i}">
-            Send Screenshot
-          </a>
-        </div>
+      <div id="tb1" class="payment-box">
+        Telebirr: 0951729849<br>
+        Misgana Birhanu Mosisa<br>
+        <a class="btn telegram" href="https://t.me/misganafx?text=I paid for Forex Basics Guide">Send Screenshot</a>
+      </div>
 
-        <div id="cbe${i}" class="payment-box">
-          <p>CBE: 1000608943874</p>
-          <p>Misgana Birhanu Mosisa</p>
-          <a class="btn telegram" href="https://t.me/misganafx?text=I%20have%20paid%20for%20Book%20${i}">
-            Send Screenshot
-          </a>
-        </div>
-
+      <div id="cbe1" class="payment-box">
+        CBE: 1000608943874<br>
+        Misgana Birhanu Mosisa<br>
+        <a class="btn telegram" href="https://t.me/misganafx?text=I paid for Forex Basics Guide">Send Screenshot</a>
       </div>
     </div>
-  `);
-}
-</script>
+  </div>
 
+  <!-- BOOK 2 -->
+  <div class="card book">
+    <img src="book2.jpg">
+    <div class="card-body">
+      <div class="title">Price Action Mastery</div>
+      <div class="price">$10</div>
+
+      <a class="btn telebirr" onclick="showPayment('tb2')">Telebirr</a>
+      <a class="btn cbe" onclick="showPayment('cbe2')">CBE</a>
+
+      <div id="tb2" class="payment-box">
+        Telebirr: 0951729849<br>
+        Misgana Birhanu Mosisa<br>
+        <a class="btn telegram" href="https://t.me/misganafx?text=I paid for Price Action Mastery">Send Screenshot</a>
+      </div>
+
+      <div id="cbe2" class="payment-box">
+        CBE: 1000608943874<br>
+        Misgana Birhanu Mosisa<br>
+        <a class="btn telegram" href="https://t.me/misganafx?text=I paid for Price Action Mastery">Send Screenshot</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD MORE BOOKS BELOW -->
 </div>
 
 </body>
