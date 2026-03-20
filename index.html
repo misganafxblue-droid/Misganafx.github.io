@@ -1,208 +1,691 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Forex Library Pro</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Forex Library Pro | Trading Books</title>
+  <meta name="description" content="Buy Forex trading books in Ethiopia. Pay with Telebirr or CBE, send screenshot via Telegram for instant delivery.">
   <style>
-    body { margin:0; font-family:'Segoe UI'; background:#f5f6f8; }
-
-    header {
-      background:#131921;
-      color:white;
-      padding:12px;
-      position:sticky;
-      top:0;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .topbar {
-      display:flex;
-      justify-content:space-between;
-      max-width:1200px;
-      margin:auto;
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', 'Amazon Ember', Roboto, Arial, sans-serif;
+      background: #EAEDED;
+      color: #111;
     }
 
-    .search {
-      width:60%;
-      padding:8px;
-      border-radius:5px;
-      border:none;
+    /* Amazon-style header */
+    .navbar {
+      background-color: #131921;
+      padding: 0.6rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    .grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
-      gap:12px;
-      padding:15px;
-      max-width:1200px;
-      margin:auto;
+    .nav-container {
+      max-width: 1500px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
-    .card {
-      background:white;
-      border-radius:8px;
-      overflow:hidden;
-      border:1px solid #ddd;
-      transition:0.2s;
+    .logo {
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      background: linear-gradient(135deg, #ffb347, #ff8c00);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: none;
+      font-weight: bold;
+    }
+    /* fallback */
+    .logo span {
+      color: #ff9900;
+      background: none;
+      -webkit-background-clip: unset;
     }
 
-    .card:hover {
-      transform:scale(1.03);
-      box-shadow:0 4px 10px rgba(0,0,0,0.15);
+    .search-bar {
+      flex: 1;
+      display: flex;
+      min-width: 200px;
     }
 
-    .card img {
-      width:100%;
-      height:160px;
-      object-fit:cover;
+    .search-bar input {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border: none;
+      border-radius: 8px 0 0 8px;
+      font-size: 1rem;
+      outline: none;
+      border: 1px solid #cdcdcd;
+      border-right: none;
     }
 
-    .card-body { padding:8px; }
+    .search-bar button {
+      background-color: #febd69;
+      border: none;
+      padding: 0 1.2rem;
+      border-radius: 0 8px 8px 0;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
 
-    .title {
-      font-size:13px;
-      font-weight:bold;
-      height:35px;
-      overflow:hidden;
+    .search-bar button:hover {
+      background-color: #f3a847;
+    }
+
+    .nav-icons {
+      display: flex;
+      gap: 1.2rem;
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .nav-icons span {
+      cursor: default;
+    }
+
+    /* main layout: sidebar + grid */
+    .main-layout {
+      max-width: 1500px;
+      margin: 1rem auto;
+      padding: 0 1rem;
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* sidebar filters */
+    .sidebar {
+      background: white;
+      border-radius: 12px;
+      padding: 1.2rem;
+      width: 260px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      height: fit-content;
+      position: sticky;
+      top: 80px;
+    }
+
+    .sidebar h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid #ff9900;
+      padding-left: 0.6rem;
+    }
+
+    .category-list {
+      list-style: none;
+    }
+
+    .category-list li {
+      padding: 0.5rem 0;
+      cursor: pointer;
+      color: #0066c0;
+      font-size: 0.9rem;
+      transition: 0.1s;
+    }
+
+    .category-list li:hover {
+      color: #c45500;
+      text-decoration: underline;
+    }
+
+    .active-cat {
+      font-weight: bold;
+      color: #c45500 !important;
+    }
+
+    /* product grid */
+    .products-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* amazon-style card */
+    .book-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .book-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .book-img {
+      background: #f7f7f7;
+      text-align: center;
+      padding: 1rem;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .book-img img {
+      max-width: 100%;
+      max-height: 180px;
+      object-fit: contain;
+      transition: transform 0.2s;
+    }
+
+    .book-card:hover .book-img img {
+      transform: scale(1.02);
+    }
+
+    .book-info {
+      padding: 0.9rem 1rem 1rem;
+      border-top: 1px solid #f0f0f0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .book-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      line-height: 1.4;
+      height: 2.7rem;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .rating {
+      margin: 0.4rem 0;
+      font-size: 0.8rem;
+      color: #ffa41c;
+      letter-spacing: 1px;
     }
 
     .price {
-      color:#B12704;
-      font-weight:bold;
-      margin:4px 0;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #B12704;
+      margin: 0.4rem 0;
     }
 
-    .btn {
-      display:block;
-      margin:3px 0;
-      padding:6px;
-      font-size:12px;
-      text-align:center;
-      border-radius:4px;
-      text-decoration:none;
-      font-weight:bold;
+    .payment-btns {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
     }
 
-    .telebirr { background:#ffd814; color:black; }
-    .cbe { background:#ffa41c; color:black; }
-    .telegram { background:#0088cc; color:white; }
+    .btn-tele, .btn-cbe {
+      flex: 1;
+      text-align: center;
+      padding: 0.5rem;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.2s;
+      border: none;
+      font-family: inherit;
+    }
 
-    .payment-box {
-      display:none;
-      font-size:11px;
-      margin-top:5px;
-      background:#f0f0f0;
-      padding:5px;
-      border-radius:5px;
+    .btn-tele {
+      background: #28a9e0;
+      color: white;
+    }
+    .btn-tele:hover {
+      background: #1f8bc0;
+    }
+    .btn-cbe {
+      background: #ffa41c;
+      color: #111;
+    }
+    .btn-cbe:hover {
+      background: #e59410;
+    }
+
+    /* modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+    }
+
+    .modal-content {
+      background: white;
+      max-width: 450px;
+      width: 90%;
+      border-radius: 24px;
+      padding: 1.5rem;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.3);
+      animation: fadeInUp 0.2s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 0.7rem;
+      margin-bottom: 1rem;
+    }
+
+    .modal-header h3 {
+      font-size: 1.3rem;
+    }
+
+    .close-modal {
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .payment-detail-box {
+      background: #f8f8f8;
+      padding: 1rem;
+      border-radius: 16px;
+      margin: 1rem 0;
+      text-align: center;
+    }
+
+    .detail-number {
+      font-size: 1.3rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      background: white;
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 40px;
+      margin: 0.5rem 0;
+    }
+
+    .telegram-btn-modal {
+      display: inline-block;
+      background: #0088cc;
+      color: white;
+      text-decoration: none;
+      padding: 0.8rem;
+      border-radius: 40px;
+      text-align: center;
+      font-weight: bold;
+      width: 100%;
+      margin: 0.6rem 0;
+      transition: 0.2s;
+    }
+
+    .copy-btn {
+      background: #e2e6e9;
+      border: none;
+      padding: 0.6rem;
+      border-radius: 40px;
+      width: 100%;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .copy-btn:hover {
+      background: #d0d4d8;
+    }
+
+    footer {
+      background: #232F3E;
+      color: #ddd;
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      font-size: 1.2rem;
+      background: white;
+      border-radius: 20px;
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 760px) {
+      .sidebar {
+        width: 100%;
+        position: static;
+        margin-bottom: 0.5rem;
+      }
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      }
+      .nav-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .search-bar {
+        order: 2;
+      }
+      .nav-icons {
+        justify-content: flex-end;
+      }
+      .book-title {
+        font-size: 0.85rem;
+      }
     }
   </style>
-
-  <script>
-    function showPayment(id){
-      let boxes=document.getElementsByClassName("payment-box");
-      for(let i=0;i<boxes.length;i++){
-        boxes[i].style.display="none";
-      }
-      document.getElementById(id).style.display="block";
-    }
-
-    function searchBooks(){
-      let input=document.getElementById("searchInput").value.toLowerCase();
-      let books=document.getElementsByClassName("book");
-
-      for(let i=0;i<books.length;i++){
-        let text=books[i].innerText.toLowerCase();
-        books[i].style.display = text.includes(input) ? "" : "none";
-      }
-    }
-  </script>
 </head>
-
 <body>
 
-<header>
-  <div class="topbar">
-    <div>Forex Library</div>
-    <input class="search" id="searchInput" onkeyup="searchBooks()" placeholder="Search books...">
+<header class="navbar">
+  <div class="nav-container">
+    <div class="logo">📚 Forex Library Pro</div>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search books (title, category...)">
+      <button id="searchBtn">🔍</button>
+    </div>
+    <div class="nav-icons">
+      <span>👤 Account</span>
+      <span>🛒 Cart</span>
+    </div>
   </div>
 </header>
 
-<div class="grid">
+<div class="main-layout">
+  <aside class="sidebar">
+    <h3>Categories</h3>
+    <ul class="category-list" id="categoryList">
+      <li data-cat="all" class="active-cat">📖 All Books</li>
+      <li data-cat="psychology">🧠 Trading Psychology</li>
+      <li data-cat="technical">📊 Technical Analysis</li>
+      <li data-cat="smartmoney">💎 Smart Money / ICT</li>
+      <li data-cat="strategy">⚡ Strategies & Scalping</li>
+      <li data-cat="basics">🌱 Beginners</li>
+    </ul>
+  </aside>
 
-<!-- BOOK 1 -->
-<div class="card book"><img src="book1.jpg"><div class="card-body"><div class="title">Simple Trading Book</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb1')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe1')">CBE</a><div id="tb1" class="payment-box">Telebirr: 0951729849<br>Misgana Birhanu Mosisa<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Simple Trading Book">Send Screenshot</a></div><div id="cbe1" class="payment-box">CBE: 1000608943874<br>Misgana Birhanu Mosisa<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Simple Trading Book">Send Screenshot</a></div></div></div>
-
-<!-- BOOK 2 -->
-<div class="card book"><img src="book2.jpg"><div class="card-body"><div class="title">Trading In The Zone</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb2')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe2')">CBE</a><div id="tb2" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Trading In The Zone">Send Screenshot</a></div><div id="cbe2" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Trading In The Zone">Send Screenshot</a></div></div></div>
-
-<!-- BOOK 3 -->
-<div class="card book"><img src="book3.jpg"><div class="card-body"><div class="title">Smart Money Concepts</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb3')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe3')">CBE</a><div id="tb3" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Smart Money Concepts">Send Screenshot</a></div><div id="cbe3" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Smart Money Concepts">Send Screenshot</a></div></div></div>
-
-<!-- BOOK 4 -->
-<div class="card book"><img src="book4.jpg"><div class="card-body"><div class="title">The Simplest Guide Book for Technical Analysis</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb4')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe4')">CBE</a><div id="tb4" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Technical Analysis Guide">Send Screenshot</a></div><div id="cbe4" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Technical Analysis Guide">Send Screenshot</a></div></div></div>
-
-<!-- BOOK 5 -->
-<div class="card book"><img src="book5.jpg"><div class="card-body"><div class="title">The Candlestick Trading Bible</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb5')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe5')">CBE</a><div id="tb5" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Candlestick Trading Bible">Send Screenshot</a></div><div id="cbe5" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Candlestick Trading Bible">Send Screenshot</a></div></div></div>
-
-<!-- BOOK 6 -->
-<div class="card book"><img src="book6.jpg"><div class="card-body"><div class="title">Mastering Trading Psychology</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb6')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe6')">CBE</a><div id="tb6" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Mastering Trading Psychology">Send Screenshot</a></div><div id="cbe6" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Mastering Trading Psychology">Send Screenshot</a></div></div></div>
-
-<!-- BOOK 7 -->
-<div class="card book"><img src="book7.jpg"><div class="card-body"><div class="title">ICT Order Block Trading</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb7')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe7')">CBE</a><div id="tb7" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for ICT Order Block Trading">Send Screenshot</a></div><div id="cbe7" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for ICT Order Block Trading">Send Screenshot</a></div></div></div>
-
-<!-- BOOK 8 -->
-<div class="card book"><img src="book8.jpg"><div class="card-body"><div class="title">Smart Money Concepts Unlocked</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb8')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe8')">CBE</a><div id="tb8" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Smart Money Concepts Unlocked">Send Screenshot</a></div><div id="cbe8" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Smart Money Concepts Unlocked">Send Screenshot</a></div></div></div>
-
-<!-- BOOK 9 -->
-<div class="card book"><img src="book9.jpg"><div class="card-body"><div class="title">The Alchemist Strategy</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb9')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe9')">CBE</a><div id="tb9" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for The Alchemist Strategy">Send Screenshot</a></div><div id="cbe9" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for The Alchemist Strategy">Send Screenshot</a></div></div></div>
-
-<!-- BOOK 10 -->
-<div class="card book"><img src="book10.jpg"><div class="card-body"><div class="title">Lit and Trap Trading Strategy</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb10')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe10')">CBE</a><div id="tb10" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Lit and Trap Trading Strategy">Send Screenshot</a></div><div id="cbe10" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Lit and Trap Trading Strategy">Send Screenshot</a></div></div></div>
-
-<!-- BOOK 11 -->
-<div class="card book"><img src="book11.jpg"><div class="card-body"><div class="title">Technical Analysis for Beginners</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb11')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe11')">CBE</a><div id="tb11" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Technical Analysis for Beginners">Send Screenshot</a></div><div id="cbe11" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Technical Analysis for Beginners">Send Screenshot</a></div></div></div>
-
-<!-- BOOK 12 -->
-<div class="card book"><img src="book12.jpg"><div class="card-body"><div class="title">Supply and Demand</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb12')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe12')">CBE</a><div id="tb12" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Supply and Demand">Send Screenshot</a></div><div id="cbe12" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Supply and Demand">Send Screenshot</a></div></div></div>
-
-<!-- BOOK 13 -->
-<div class="card book"><img src="book13.jpg"><div class="card-body"><div class="title">Top 5 Scalping Strategies</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb13')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe13')">CBE</a><div id="tb13" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Top 5 Scalping Strategies">Send Screenshot</a></div><div id="cbe13" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Top 5 Scalping Strategies">Send Screenshot</a></div></div></div>
-
+  <div class="products-grid" id="productsGrid"></div>
 </div>
-<!-- BOOK 14 -->
-<div class="card book"><img src="book14.jpg"><div class="card-body"><div class="title">20 Forex Trading Strategies</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb14')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe14')">CBE</a><div id="tb14" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for 20 Forex Trading Strategies">Send Screenshot</a></div><div id="cbe14" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for 20 Forex Trading Strategies">Send Screenshot</a></div></div></div>
 
-<!-- BOOK 15 -->
-<div class="card book"><img src="book15.jpg"><div class="card-body"><div class="title">The Disciplined Trader</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb15')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe15')">CBE</a><div id="tb15" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for The Disciplined Trader">Send Screenshot</a></div><div id="cbe15" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for The Disciplined Trader">Send Screenshot</a></div></div></div>
+<footer>
+  <p>📞 Payment: Telebirr 0951729849 (Misgana Birhanu) | CBE 1000608943874</p>
+  <p>After payment, click Telegram button to send screenshot — we'll deliver your book within minutes.</p>
+  <p>© Forex Library Pro — Ethiopian Forex Books Marketplace</p>
+</footer>
 
-<!-- BOOK 16 -->
-<div class="card book"><img src="book16.jpg"><div class="card-body"><div class="title">The Mental Game of Trading</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb16')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe16')">CBE</a><div id="tb16" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for The Mental Game of Trading">Send Screenshot</a></div><div id="cbe16" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for The Mental Game of Trading">Send Screenshot</a></div></div></div>
+<div id="paymentModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>💰 Complete Payment</h3>
+      <span class="close-modal">&times;</span>
+    </div>
+    <p><strong id="modalBookName"></strong> — <span class="price" style="font-size:1.1rem">250 Birr</span></p>
+    <div id="modalPaymentMethodContent"></div>
+    <a href="#" id="modalTelegramLink" target="_blank" class="telegram-btn-modal">📨 Send Screenshot on Telegram</a>
+    <button id="copyPaymentBtn" class="copy-btn">📋 Copy Payment Details</button>
+    <p style="font-size: 0.7rem; text-align: center; margin-top: 12px;">After sending payment proof, you'll receive the PDF book via Telegram.</p>
+  </div>
+</div>
 
-<!-- BOOK 17 -->
-<div class="card book"><img src="book17.jpg"><div class="card-body"><div class="title">Breakout Trading Strategy</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb17')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe17')">CBE</a><div id="tb17" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Breakout Trading Strategy">Send Screenshot</a></div><div id="cbe17" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Breakout Trading Strategy">Send Screenshot</a></div></div></div>
+<script>
+  // ---------- BOOK DATABASE (25 books with categories) ----------
+  const books = [
+    { id: 1, title: "Simple Trading Book", category: "basics", img: "book1.jpg" },
+    { id: 2, title: "Trading In The Zone", category: "psychology", img: "book2.jpg" },
+    { id: 3, title: "Smart Money Concepts", category: "smartmoney", img: "book3.jpg" },
+    { id: 4, title: "The Simplest Guide for Technical Analysis", category: "technical", img: "book4.jpg" },
+    { id: 5, title: "The Candlestick Trading Bible", category: "technical", img: "book5.jpg" },
+    { id: 6, title: "Mastering Trading Psychology", category: "psychology", img: "book6.jpg" },
+    { id: 7, title: "ICT Order Block Trading", category: "smartmoney", img: "book7.jpg" },
+    { id: 8, title: "Smart Money Concepts Unlocked", category: "smartmoney", img: "book8.jpg" },
+    { id: 9, title: "The Alchemist Strategy", category: "strategy", img: "book9.jpg" },
+    { id: 10, title: "Lit and Trap Trading Strategy", category: "strategy", img: "book10.jpg" },
+    { id: 11, title: "Technical Analysis for Beginners", category: "basics", img: "book11.jpg" },
+    { id: 12, title: "Supply and Demand", category: "smartmoney", img: "book12.jpg" },
+    { id: 13, title: "Top 5 Scalping Strategies", category: "strategy", img: "book13.jpg" },
+    { id: 14, title: "20 Forex Trading Strategies", category: "strategy", img: "book14.jpg" },
+    { id: 15, title: "The Disciplined Trader", category: "psychology", img: "book15.jpg" },
+    { id: 16, title: "The Mental Game of Trading", category: "psychology", img: "book16.jpg" },
+    { id: 17, title: "Breakout Trading Strategy", category: "strategy", img: "book17.jpg" },
+    { id: 18, title: "The Blueprint of Trading Psychology", category: "psychology", img: "book18.jpg" },
+    { id: 19, title: "Advanced Day Trading Techniques", category: "technical", img: "book19.jpg" },
+    { id: 20, title: "High Probability Day Trading Strategies", category: "strategy", img: "book20.jpg" },
+    { id: 21, title: "How to Master the Art of Trading", category: "basics", img: "book21.jpg" },
+    { id: 22, title: "The Ultimate Smart Money Concepts", category: "smartmoney", img: "book22.jpg" },
+    { id: 23, title: "Reading Candlestick Charts in Crypto Trading", category: "technical", img: "book23.jpg" },
+    { id: 24, title: "ICT Inner Circle Trader Strategy", category: "smartmoney", img: "book24.jpg" },
+    { id: 25, title: "Supply and Demand Trading Book", category: "smartmoney", img: "book25.jpg" }
+  ];
 
-<!-- BOOK 18 -->
-<div class="card book"><img src="book18.jpg"><div class="card-body"><div class="title">The Blueprint of Trading Psychology</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb18')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe18')">CBE</a><div id="tb18" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for The Blueprint of Trading Psychology">Send Screenshot</a></div><div id="cbe18" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for The Blueprint of Trading Psychology">Send Screenshot</a></div></div></div>
+  // payment constants (same for all books)
+  const TELEBIRR_NUMBER = "0951729849";
+  const CBE_ACCOUNT = "1000608943874";
+  const ACCOUNT_NAME = "Misgana Birhanu Mosisa";
+  const TELEGRAM_USERNAME = "misganafx";   // your telegram @username or link
 
-<!-- BOOK 19 -->
-<div class="card book"><img src="book19.jpg"><div class="card-body"><div class="title">Advanced Day Trading Techniques</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb19')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe19')">CBE</a><div id="tb19" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Advanced Day Trading Techniques">Send Screenshot</a></div><div id="cbe19" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Advanced Day Trading Techniques">Send Screenshot</a></div></div></div>
+  // Helper: get telegram link with pre-filled text
+  function getTelegramLink(bookTitle, method) {
+    const text = `I paid for "${bookTitle}" via ${method}. Amount: 250 Birr. Screenshot attached.`;
+    return `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(text)}`;
+  }
 
-<!-- BOOK 20 -->
-<div class="card book"><img src="book20.jpg"><div class="card-body"><div class="title">High Probability Day Trading Strategies</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb20')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe20')">CBE</a><div id="tb20" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for High Probability Day Trading Strategies">Send Screenshot</a></div><div id="cbe20" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for High Probability Day Trading Strategies">Send Screenshot</a></div></div></div>
+  // render stars rating (static 4.5 stars aesthetic)
+  function renderRating() {
+    return "⭐️⭐️⭐️⭐️☆";
+  }
 
-<!-- BOOK 21 -->
-<div class="card book"><img src="book21.jpg"><div class="card-body"><div class="title">How to Master the Art of Trading</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb21')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe21')">CBE</a><div id="tb21" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for How to Master the Art of Trading">Send Screenshot</a></div><div id="cbe21" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for How to Master the Art of Trading">Send Screenshot</a></div></div></div>
+  // generate book card HTML
+  function createBookCard(book) {
+    // fallback image if not exists: use a placeholder with book title
+    const imgSrc = book.img ? book.img : `https://placehold.co/300x200?text=${encodeURIComponent(book.title.slice(0,20))}`;
+    return `
+      <div class="book-card" data-id="${book.id}" data-title="${book.title}" data-category="${book.category}">
+        <div class="book-img">
+          <img src="${imgSrc}" alt="${book.title}" onerror="this.src='https://placehold.co/300x200?text=Forex+Book'">
+        </div>
+        <div class="book-info">
+          <div class="book-title">${book.title}</div>
+          <div class="rating">${renderRating()}  (4.5)</div>
+          <div class="price">250 Birr</div>
+          <div class="payment-btns">
+            <button class="btn-tele" data-book='${JSON.stringify(book)}' data-method="Telebirr">📱 Telebirr</button>
+            <button class="btn-cbe" data-book='${JSON.stringify(book)}' data-method="CBE">🏦 CBE Birr</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
-<!-- BOOK 22 -->
-<div class="card book"><img src="book22.jpg"><div class="card-body"><div class="title">The Ultimate Smart Money Concepts</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb22')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe22')">CBE</a><div id="tb22" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for The Ultimate Smart Money Concepts">Send Screenshot</a></div><div id="cbe22" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for The Ultimate Smart Money Concepts">Send Screenshot</a></div></div></div>
+  let currentFilterCategory = "all";
+  let currentSearchTerm = "";
 
-<!-- BOOK 23 -->
-<div class="card book"><img src="book23.jpg"><div class="card-body"><div class="title">Reading Candlestick Charts in Crypto Trading</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb23')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe23')">CBE</a><div id="tb23" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Reading Candlestick Charts in Crypto Trading">Send Screenshot</a></div><div id="cbe23" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Reading Candlestick Charts in Crypto Trading">Send Screenshot</a></div></div></div>
+  function renderBooks() {
+    const grid = document.getElementById("productsGrid");
+    let filtered = [...books];
 
-<!-- BOOK 24 -->
-<div class="card book"><img src="book24.jpg"><div class="card-body"><div class="title">ICT Inner Circle Trader Strategy</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb24')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe24')">CBE</a><div id="tb24" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for ICT Inner Circle Trader Strategy">Send Screenshot</a></div><div id="cbe24" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for ICT Inner Circle Trader Strategy">Send Screenshot</a></div></div></div>
+    // filter by category
+    if (currentFilterCategory !== "all") {
+      filtered = filtered.filter(book => book.category === currentFilterCategory);
+    }
+    // filter by search term (title)
+    if (currentSearchTerm.trim() !== "") {
+      const term = currentSearchTerm.trim().toLowerCase();
+      filtered = filtered.filter(book => book.title.toLowerCase().includes(term));
+    }
 
-<!-- BOOK 25 -->
-<div class="card book"><img src="book25.jpg"><div class="card-body"><div class="title">Supply and Demand Trading Book</div><div class="price">250 Birr</div><a class="btn telebirr" onclick="showPayment('tb25')">Telebirr</a><a class="btn cbe" onclick="showPayment('cbe25')">CBE</a><div id="tb25" class="payment-box">Telebirr: 0951729849<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Supply and Demand Trading Book">Send Screenshot</a></div><div id="cbe25" class="payment-box">CBE: 1000608943874<br><a class="btn telegram" href="https://t.me/misganafx?text=I paid for Supply and Demand Trading Book">Send Screenshot</a></div></div></div>
-</body>
-                        </html>
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="no-results">📭 No books found. Try another search or category.</div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(book => createBookCard(book)).join("");
+
+    // attach event listeners to payment buttons after render
+    document.querySelectorAll(".btn-tele, .btn-cbe").forEach(btn => {
+      btn.removeEventListener("click", paymentHandler);
+      btn.addEventListener("click", paymentHandler);
+    });
+  }
+
+  // payment modal logic
+  let currentModalBook = null;
+  let currentModalMethod = null;
+  const modal = document.getElementById("paymentModal");
+  const modalBookNameSpan = document.getElementById("modalBookName");
+  const modalPaymentMethodContent = document.getElementById("modalPaymentMethodContent");
+  const modalTelegramLink = document.getElementById("modalTelegramLink");
+  const copyBtn = document.getElementById("copyPaymentBtn");
+
+  function paymentHandler(e) {
+    e.stopPropagation();
+    const btn = e.currentTarget;
+    const bookDataAttr = btn.getAttribute("data-book");
+    if (!bookDataAttr) return;
+    const book = JSON.parse(bookDataAttr);
+    const method = btn.classList.contains("btn-tele") ? "Telebirr" : "CBE";
+    
+    currentModalBook = book;
+    currentModalMethod = method;
+    
+    modalBookNameSpan.innerText = book.title;
+    
+    let detailsHtml = "";
+    let paymentNumber = "";
+    if (method === "Telebirr") {
+      paymentNumber = TELEBIRR_NUMBER;
+      detailsHtml = `
+        <div class="payment-detail-box">
+          <strong>📱 Telebirr Payment</strong><br>
+          Number: <span class="detail-number">${TELEBIRR_NUMBER}</span><br>
+          Account Name: ${ACCOUNT_NAME}<br>
+          Amount: <strong>250 Birr</strong><br>
+          <small>Send exactly 250 Birr and click the Telegram button below</small>
+        </div>
+      `;
+    } else {
+      paymentNumber = CBE_ACCOUNT;
+      detailsHtml = `
+        <div class="payment-detail-box">
+          <strong>🏦 Commercial Bank of Ethiopia (CBE)</strong><br>
+          Account: <span class="detail-number">${CBE_ACCOUNT}</span><br>
+          Account Name: ${ACCOUNT_NAME}<br>
+          Amount: <strong>250 Birr</strong><br>
+          <small>Transfer 250 Birr via CBE Birr or bank app</small>
+        </div>
+      `;
+    }
+    
+    modalPaymentMethodContent.innerHTML = detailsHtml;
+    const tgLink = getTelegramLink(book.title, method);
+    modalTelegramLink.href = tgLink;
+    
+    // store current payment details for copy
+    let copyText = "";
+    if (method === "Telebirr") {
+      copyText = `Telebirr: ${TELEBIRR_NUMBER} | Name: ${ACCOUNT_NAME} | Amount: 250 Birr (Book: ${book.title})`;
+    } else {
+      copyText = `CBE Account: ${CBE_ACCOUNT} | Name: ${ACCOUNT_NAME} | Amount: 250 Birr (Book: ${book.title})`;
+    }
+    
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(copyText).then(() => {
+        copyBtn.innerText = "✅ Copied!";
+        setTimeout(() => { copyBtn.innerText = "📋 Copy Payment Details"; }, 2000);
+      }).catch(() => alert("Press Ctrl+C to copy"));
+    };
+    
+    modal.style.display = "flex";
+  }
+
+  // close modal events
+  function closeModal() {
+    modal.style.display = "none";
+  }
+  document.querySelector(".close-modal").addEventListener("click", closeModal);
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  // search & category logic
+  const searchInput = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
+  function updateSearch() {
+    currentSearchTerm = searchInput.value;
+    renderBooks();
+  }
+  searchBtn.addEventListener("click", updateSearch);
+  searchInput.addEventListener("keyup", (e) => {
+    if (e.key === "Enter") updateSearch();
+    else {
+      currentSearchTerm = searchInput.value;
+      renderBooks();
+    }
+  });
+
+  // category filter
+  const categoryItems = document.querySelectorAll("#categoryList li");
+  function setActiveCategory(catValue) {
+    categoryItems.forEach(li => {
+      const liCat = li.getAttribute("data-cat");
+      if (liCat === catValue) {
+        li.classList.add("active-cat");
+      } else {
+        li.classList.remove("active-cat");
+      }
+    });
+  }
+  categoryItems.forEach(li => {
+    li.addEventListener("click", () => {
+      const catValue = li.getAttribute("data-cat");
+      currentFilterCategory = catValue;
+      setActiveCategory(catValue);
+      renderBooks();
+    });
+  });
+
+  // image fallback: if any book image fails load, replace with placeholder
+  function addImageFallback() {
+    document.querySelectorAll(".book-img img").forEach(img => {
+      img.addEventListener("error", function() {
+        if (!this.dataset.fallback) {
+          this.dataset.fallback = "true";
+          this.src = "https://placehold.co/300x200?text=Forex+Book";
+        }
+      });
+    });
+  }
+
+  // initial rende
